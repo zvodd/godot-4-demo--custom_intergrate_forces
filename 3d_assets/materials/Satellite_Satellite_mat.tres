@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://d2ul17mb8dkih"]
+
+[ext_resource type="Texture2D" uid="uid://bx4d210awhau6" path="res://3d_assets/materials/Satellite.webp" id="1_st75j"]
+
+[resource]
+resource_name = "Satellite:Satellite_mat"
+albedo_color = Color(0.5, 0.5, 0.5, 1)
+albedo_texture = ExtResource("1_st75j")

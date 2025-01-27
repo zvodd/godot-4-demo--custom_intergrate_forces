@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://d3lsvnmwmgjv1"]
+
+[ext_resource type="Texture2D" uid="uid://dyy73acwgl6" path="res://3d_assets/materials/elon_musk_texpaint.webp" id="1_t5f0t"]
+
+[resource]
+resource_name = "MuskHead"
+albedo_texture = ExtResource("1_t5f0t")
+roughness = 0.8

@@ -1,0 +1,64 @@
+[gd_scene load_steps=10 format=3 uid="uid://v7yvumeeaftn"]
+
+[ext_resource type="Script" uid="uid://bpiksbsjophhj" path="res://script/body_orbit_ent.gd" id="1_se7i6"]
+[ext_resource type="Script" uid="uid://qbdwncej40q4" path="res://script/follow_phys_interpolate.gd" id="2_lkmrv"]
+[ext_resource type="Script" uid="uid://b81ir2ginr8ob" path="res://script/behavior_spinner.gd" id="4_1fviw"]
+[ext_resource type="PackedScene" uid="uid://d2y4crh7apmp1" path="res://3d_entity/satellite.tscn" id="5_rrxwp"]
+[ext_resource type="PackedScene" uid="uid://cta8ng75qn5ew" path="res://3d_assets/EggShape.glb" id="6_3mj7j"]
+[ext_resource type="PackedScene" uid="uid://btxbfkrj1er02" path="res://3d_assets/earth.glb" id="7_opa8c"]
+
+[sub_resource type="Environment" id="Environment_se7i6"]
+background_mode = 1
+background_color = Color(0.147672, 0.147672, 0.147672, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.36
+tonemap_mode = 2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_h7e84"]
+radius = 2.04824
+
+[sub_resource type="GDScript" id="GDScript_lcfbh"]
+script/source = "extends Camera3D
+
+func _process(delta: float) -> void:
+	#get_tree().root.set
+	set_current(true)
+"
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_se7i6")
+
+[node name="OrbitEnt" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.7267, 0, 0)
+
+[node name="RigidBody3D" type="RigidBody3D" parent="OrbitEnt"]
+custom_integrator = true
+constant_force = Vector3(0, 5, 0)
+script = ExtResource("1_se7i6")
+gravity_center_path = NodePath("../../earth")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="OrbitEnt/RigidBody3D"]
+shape = SubResource("SphereShape3D_h7e84")
+
+[node name="Follow" type="Node3D" parent="OrbitEnt"]
+script = ExtResource("2_lkmrv")
+target_path = NodePath("../RigidBody3D")
+
+[node name="OrbitBoy" type="Node3D" parent="OrbitEnt/Follow"]
+script = ExtResource("4_1fviw")
+
+[node name="Satellite" parent="OrbitEnt/Follow/OrbitBoy" instance=ExtResource("5_rrxwp")]
+
+[node name="EggShape" parent="OrbitEnt/Follow/OrbitBoy" instance=ExtResource("6_3mj7j")]
+transform = Transform3D(1, 0, 0, 0, -0.117572, 0.993064, 0, -0.993064, -0.117572, 0, 0, 0)
+
+[node name="earth" parent="." instance=ExtResource("7_opa8c")]
+transform = Transform3D(1, -0.000945542, -0.000406093, 0.00094582, 0.999999, 0.000658333, 0.000405445, -0.000658731, 1, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 70, 0)
+current = true
+script = SubResource("GDScript_lcfbh")
