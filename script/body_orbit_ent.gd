@@ -5,7 +5,6 @@ extends RigidBody3D
 @export var constant_gavity : float = 8.0
 
 @onready var gravity_center_node = get_node(gravity_center_path)
-@onready var phys_delta = 1.0 / Engine.physics_ticks_per_second
 var first_frame: bool = true
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
@@ -22,8 +21,14 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var force = force_dir * constant_gavity
 	
 	# Apply the gravitational force
-	#state.apply_central_force(force) # Does nothing?
-	state.apply_impulse(force * phys_delta)  # Works as intented
+	#state.apply_central_force(force * 1000) # Does nothing?
+	
+	#state.apply_central_impulse(force * state.step)  # Works as intented
+	
+	## Alternatively this works as well
+	var acceleration = force / mass
+	var velocity_change = acceleration * state.step
+	state.linear_velocity += velocity_change
 	
 
 func _ready() -> void:
